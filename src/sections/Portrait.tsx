@@ -44,7 +44,7 @@ export default function Portrait() {
       <SectionHead name="人像" en="PORTRAIT" count={list.length} desc="镜头里的他们" />
 
       {/* 系列分组 */}
-      {seriesList.length > 1 && (
+      {seriesList.length > 2 && (
         <div className="px-[6vw] mb-10 flex flex-wrap gap-x-7 gap-y-3">
           {seriesList.map((s) => (
             <a
