@@ -8,7 +8,7 @@ export const SITE = {
   name: "流光小记",
   nameEn: "LUMIÈRE · PHOTO JOURNAL",
   owner: "刘广明",
-  domain: "lumiere.cn",
+  domain: "liumiere.cn",
   slogan: "随手记录日常",
 
   /* 部署时填写（留空 = 演示模式，显示高质量占位图） */
