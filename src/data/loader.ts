@@ -12,6 +12,18 @@ import { demoByCategory } from "./demo";
 const IMG_RE = /\.(jpe?g|png|webp)$/i;
 const VID_RE = /\.(mp4|webm|mov)$/i;
 
+// 从文件名提取系列名，格式：系列名-其他信息.jpg
+// 例：自然光人像-2026-08-青岩.jpg → 系列：自然光人像
+function extractSeries(filename: string): string | undefined {
+  const base = filename.replace(/\.[^.]+$/, "");
+  const parts = base.split(/[-_]/);
+  // 如果文件名以中文系列名开头（2~6个中文字），提取为系列
+  if (parts[0] && /^[\u4e00-\u9fa5]{2,6}$/.test(parts[0])) {
+    return parts[0];
+  }
+  return undefined;
+}
+
 async function fetchFolder(folder: string): Promise<Work[]> {
   const { user, repo, branch } = SITE.github;
   const api = `https://api.github.com/repos/${user}/${repo}/contents/photos/${folder}?ref=${branch}`;
@@ -28,6 +40,7 @@ async function fetchFolder(folder: string): Promise<Work[]> {
     .map((f) => {
       const isVideo = VID_RE.test(f.name);
       const base = f.name.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ");
+      const series = extractSeries(f.name);
       return {
         id: `${folder}-${f.name}`,
         type: isVideo ? "video" : "image",
@@ -36,7 +49,8 @@ async function fetchFolder(folder: string): Promise<Work[]> {
         poster: isVideo ? f.download_url : undefined,
         title: base,
         date: base.slice(0, 10),
-        exif: {}, // 真实照片由查看器现场读取 EXIF
+        series, // ← 新增：从文件名提取系列
+        exif: {},
       } as Work;
     });
 
