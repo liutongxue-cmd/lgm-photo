@@ -30,7 +30,7 @@ jobs:
           cache: npm
 
       # 安装依赖
-      - run: npm ci
+      - run: npm install --no-audit --no-fund
 
       # 构建（tsc + vite build）
       - run: npm run build
